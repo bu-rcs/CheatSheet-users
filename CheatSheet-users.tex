@@ -1,0 +1,290 @@
+\documentclass[10pt,landscape]{article}
+\usepackage{multicol}
+\usepackage{calc}
+\usepackage{ifthen}
+\usepackage[landscape]{geometry}
+\usepackage{hyperref}
+\usepackage[usenames, dvipsnames]{color}
+
+% This sets page margins to .5 inch if using letter paper, and to 1cm
+% if using A4 paper. (This probably isn't strictly necessary.)
+% If using another size paper, use default 1cm margins.
+\ifthenelse{\lengthtest { \paperwidth = 11in}}
+	{ \geometry{top=.5in,left=.5in,right=.5in,bottom=.5in} }
+	{\ifthenelse{ \lengthtest{ \paperwidth = 297mm}}
+		{\geometry{top=1cm,left=1cm,right=1cm,bottom=1cm} }
+		{\geometry{top=1cm,left=1cm,right=1cm,bottom=1cm} }
+	}
+
+% Turn off header and footer
+\pagestyle{empty}
+ 
+
+% Redefine section commands to use less space
+\makeatletter
+\renewcommand{\section}{\@startsection{section}{1}{0mm}%
+                                {-1ex plus -.5ex minus -.2ex}%
+                                {0.5ex plus .2ex}%x
+                                {\normalfont\large\bfseries}}
+\renewcommand{\subsection}{\@startsection{subsection}{2}{0mm}%
+                                {-1explus -.5ex minus -.2ex}%
+                                {0.5ex plus .2ex}%
+                                {\normalfont\normalsize\bfseries}}
+\renewcommand{\subsubsection}{\@startsection{subsubsection}{3}{0mm}%
+                                {-1ex plus -.5ex minus -.2ex}%
+                                {1ex plus .2ex}%
+                                {\normalfont\small\bfseries}}
+\makeatother
+
+% Define BibTeX command
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+
+% Don't print section numbers
+\setcounter{secnumdepth}{0}
+
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0pt plus 0.5ex}
+
+\definecolor{mygray}{gray}{0.4}
+
+% -----------------------------------------------------------------------
+
+\begin{document}
+
+\raggedright
+\footnotesize
+
+\begin{center}
+     \Large{\textbf{Shared Computing Cluster Usage Cheat Sheet}} \\
+\end{center}
+
+\begin{multicols*}{2}
+
+
+% multicol parameters
+% These lengths are set only within the two main columns
+%\setlength{\columnseprule}{0.25pt}
+\setlength{\premulticols}{1pt}
+\setlength{\postmulticols}{1pt}
+\setlength{\multicolsep}{1pt}
+\setlength{\columnsep}{2pt}
+
+\section{Useful Links }
+\begin{tabular}{@{}ll@{}}
+\verb! RCS Website: ! & \url{rcs.bu.edu}    \\
+\verb! email: ! & \href{mailto:help@scc.bu.edu}{help@scc.bu.edu}    \\
+\verb! Software list: ! & \url{rcs.bu.edu/software}    \\
+\verb! Examples: ! & \url{rcs.bu.edu/examples}    \\
+\end{tabular}
+
+\vspace{10pt}
+
+\section{qsh/qrsh (submit an interactive job) }
+\begin{tabular}{@{}ll@{}}
+\verb!qsh !   & Submit an interactive X-windows session  \\
+\verb!qrsh !  & Submit an interactive rsh session\\
+\end{tabular}
+
+\section{qsub (submit a batch job) }
+\begin{tabular}{@{}ll@{}}
+\verb!-P !\textit{project-name}   & Project name \\
+\verb!-N !\textit{job-name}   & Job name\\
+\verb!-l h_rt=!\textit{hh:mm:ss}   & Hard time limit\\
+\verb!-m e!  & Send an email when the job ends\\
+\verb!-m ea!  & Send an email when the job ends or is aborted\\
+\verb!-M !\textit{my.email@gmail.com}  & Use non-BU email address\\
+\verb!-j y ! & Merge error and output files into a single file\\
+\verb!-l mem_per_core=!\textit{8G}  & At least 8G of memory per core (6G, 8G, 9G, 16G, 18G)\\
+\verb!-pe omp !\textit{N}  & Request multiple slots (cores), i.e. 4, 8, 12, 16, 28, 36 \\
+\verb!-pe mpi_16_tasks_per_node! \textit{N}  & Submit MPI job ( 16 or 28 tasks per node ) \\
+\verb!-t 1-10 !  & Submit 10 tasks \\
+\verb!-l gpus=1 !  & Request 1 GPU \\
+\verb!-l gpu_c=3.5 !  & Request GPU capability at least 3.5 (6.0 for P100) \\
+\verb!-l gpu_type=K40m !  & Specify GPU type (M2070, K40, P100) \\
+\verb!-hold_jid !\textit{joblist}  & Setup job dependency list \\
+\verb!-b y !  & Submit binary program \\
+\verb!-l buyin !  & Force the job to run only on a buyin node \\
+\verb!-q !\textit{queue-name}   & Force the job to run only in a specific queue \\
+\verb!-verify ! & Instead of submitting a job, prints info about the job
+\end{tabular}
+\vspace{10pt}
+
+\section{qstat (get information about current jobs)}
+\begin{tabular}{@{}ll@{}}
+\verb!qstat!   & List of all current jobs \\
+\verb!qstat -u !\textit{user-id}   & All current jobs submitted by the user \textit{user-id}\\
+\verb!qstat -s r! & List of running jobs \\
+\verb!qstat -s p!  & List of pending jobs (hw, hqw, Eqw...)\\
+\verb!qstat -u !\textit{user-id} -r  & Display the resources requested by the user for his jobs\\
+\verb!qstat -u !\textit{user-id} -ext  & Extended info about the user's jobs\\
+\verb!qstat -u !\textit{user-id} -s r -t  & Display info about sub-tasks of parallel jobs\\
+\verb!qstat -j !\textit{job-id}  & Display job status\\
+\verb!qstat -g c!  & Display the list of queues and load information\\
+\verb!qstat -q !\textit{queue}   & Display jobs running on a particular queue\\
+\end{tabular}
+
+\vspace{10pt}
+
+\section{qdel (delete job from the queue) }
+\begin{tabular}{@{}ll@{}}
+\verb!qdel !\textit{job-id}   & Delete job \textit{job-id} \\
+\verb!qdel !\textit{job-id} -t 5-7   & Delete tasks 5 through 7 for job \textit{job-id} \\
+\verb!qdel -u !\textit{user-id}   & Delete all the jobs submitted by the user\\
+\end{tabular}
+
+
+
+\section{module (software environment)}
+\begin{tabular}{@{}ll@{}}
+\verb!module avail!   & List available packages \\
+\verb!module avail -t 2>\& 1 | less!   & Pipe module list to \textit{less} command\\
+\verb!moduleavail  | grep matlab!   & Fast search \\
+\verb!module load !\textit{matlab/2016a}    & Load module \textit{matlab} version 2016a \\
+\verb!module show !\textit{matlab/2016a}    & Show the content (env. variables) of module \textit{matlab/2016a} \\
+\verb!module unload !\textit{matlab/2016a}    & Unload the module\\ 
+\verb!module help !\textit{matlab/2016a}    & View information/help for specific module\\ 
+\verb!module list !    & List all loaded modules\\
+\verb!module purge !    & Unload all loaded modules\\
+\verb!module help !    & List options for the module command\\
+\end{tabular}
+
+\vspace{15pt}
+
+\section{acctool (account information) }
+\begin{tabular}{@{}ll@{}}
+\verb!acctool -b y!   & SU balance summary of all the projects I belong to \\
+\verb!acctool -u !\textit{user-id} -b y   & SU balance summary of all the projects \textit{user-id} belongs to \\
+\verb!acctool 06/18/15!   & Number of jobs and wallclock report for the day \\
+\verb!acctool -d 2 06/18/15!   & Number of jobs and wallclock detailed report for the day \\
+\verb!acctool -d 2 -t 5 06/18/15!   & Display detailed report for the top 5 jobs for the day \\
+\verb!acctool -d 4 06/18/15!   & Most detailed report for all the jobs that finished on particular day \\
+\verb!acctool -j !\textit{job-id} 06/18/15  & Report for job with given job ID. \\
+\end{tabular}
+
+\vspace{15pt}
+
+\section{qacct (past job information) }
+\begin{tabular}{@{}ll@{}}
+\verb!qacct -j !\textit{job-id}   & Detailed report about job \textit{job-id} \\
+\verb!qacct -d 3 -o !\textit{user-id} -j   & Detailed report about all the jobs user ran in the past 3 days \\
+\verb!qacct -d 3 -o !\textit{user-id} -q \textit{queue} -j   & Detailed report about all the jobs user ran using queue \textit{queue} \\
+\verb!qacct -P !\textit{project-id}   & Summary report for the project (current year usage) \\
+\end{tabular}
+\vspace{15pt}
+
+\section{quota (home directory space usage) }
+\begin{tabular}{@{}ll@{}}
+\verb!Home directory quota: !&10GB \\
+\verb!quota   !& Display my Home directory usage \\
+\verb!quota -s  !& Display my Home directory usage in human-readable format \\
+\verb!quota !\textit{user-id} & Display Home directory usage for \textit{user-id} \\
+\end{tabular}
+\vspace{15pt}
+
+\section{pquota (Project Disk Space usage) }
+\begin{tabular}{@{}ll@{}}
+\verb!Project directories quota: !&Up to 1TB with 200GB limit for /project partition \\
+\verb!pquota   !& Project Disk quota and usage for all the projects I belong to \\
+\verb!pquota -u !\textit{project} & Project Disk quota and usage for \textit{project} \\
+\end{tabular}
+\vspace{15pt}
+
+\subsection{User Guidelines }
+\begin{tabular}{@{}ll@{}}
+\verb!15 minutes !& CPU time on login nodes    \\
+\verb!12 hours !& Default wall clock time for a job    \\
+\verb!720 hours !& Wall clock time limit for a single-node job    \\
+\verb!120 hours !& Wall clock time limit for mpi job running on multiple nodes  \\
+\verb!48 hours !& Wall clock time limit for gpu jobs  \\\\
+\end{tabular}
+\vspace{15pt}
+
+\clearpage
+
+\subsection{Connecting to the Shared Computing Cluster }
+\begin{tabular}{@{}ll@{}}
+\verb! scc1, scc2, scc3(geo), scc4 !  & SCC login nodes  \\
+\\
+\verb! ssh !\textit{username}@scc2.bu.edu & Windows (in mobaXterm)   \\
+\verb! ssh -Y  !\textit{username}@scc2.bu.edu  & Mac   \\
+\verb! ssh -X  !\textit{username}@scc2.bu.edu  & Linux   \\
+\end{tabular}
+
+\vspace{15pt}
+
+
+
+\subsection{Working with the Project Disc Space }
+\begin{tabular}{@{}ll@{}}
+\verb! groups!  & List all projects which I belong to  \\
+\verb! cd /project/!\textit{myproject}  & Change directory to the /project directory    \\
+\verb! cd /projectnb/!\textit{myproject}  & Change directory to the /projectnb directory \\
+\verb! cd /restricted/project/!\textit{myproject}  & Change directory to the /restricted/project directory (from scc4 only) \\
+\verb! cd /restricted/projectnb/!\textit{myproject}  & Change directory to the /restricted/projectnb directory (from scc4 only) \\
+\end{tabular}
+
+\vspace{15pt}
+
+\subsection{Available editors }
+\begin{tabular}{@{}ll@{}}
+\verb! emacs!  & Text editor ("the extensible, customizable, self-documenting, real-time display editor")  \\
+\verb! vi, vim, gvim !  &  Another popular text editor \\
+\verb! gedit ! & GNOME notepad-like text editor   \\
+\verb! nano ! & GNU text editor with command-line interface    \\
+
+\end{tabular}
+
+\vspace{15pt}
+
+
+\subsection{Commands to transfer files and Popular FTP clients }
+\begin{tabular}{@{}ll@{}}
+Note: The following \textit{scp} commands should be executed on the local machine.\\
+\verb! scp !\textit{filename username}@scc1.bu.edu:\textasciitilde   & Upload file from your local machine to your home directory on the SCC   \\
+\verb! scp !\textit{filename username}@scc4.bu.edu:/project/\textit{myproject}   & Upload file from your local machine to your specified project directory on the SCC  \\
+\verb! scp !\textit{username}@scc4.bu.edu:/project/\textit{myproject/filename} .   & Download file from your project directory on the SCC  to the current directory on your local machine\\
+\verb! rsync !\textit{filename username}@scc1.bu.edu:\textasciitilde   & sync a file from your local machine with the file in your home directory on the SCC   \\
+\\
+\verb! wget !\textit{http://www.site.org/file}  & Download a file from a website\\
+\\
+\verb! Cyberduck!  & Windows and MAC FTP client \\
+\verb! FileZilla !  & Windows and MAC FTP client\\
+\verb! WinSCP ! & Windows  FTP client  \\
+\\
+\verb! dos2unix! \textit{filename}  & Convert file with DOS/MAC characters to UNIX/Linux format (execute on SCC) \\
+\end{tabular}
+
+\vspace{15pt}
+
+\subsection{Snapshots}
+\begin{tabular}{@{}ll@{}}
+\verb! .snapshots/\textit{YYMMDD} !   & Snapshots directory structure  \\
+\verb! ls .snapshots/161205 !   & View the snapshot of the directory created on December 5th, 2016  \\
+\\
+\verb! 180 days !   & Snapshots are stored for /project and home directories  \\
+\verb! 30 days !   & Snapshots are stored for /projectnb directories  \\
+
+
+\end{tabular}
+
+\vspace{15pt}
+
+\subsection{VNC (scc2, scc3(geo) and scc4 only) }
+\begin{tabular}{@{}ll@{}}
+\verb! !\textcolor{mygray}{[scc2 ~]} vncpasswd  & Set VNC password   \\
+\verb! !\textcolor{mygray}{[scc2 ~]} vncstart  & Start VNC server    \\
+\verb! !\textcolor{mygray}{[scc2 ~]} vncstart -geometry 1900x1200  & Start VNC server with specific screen resolution   \\
+\verb! !\textcolor{mygray}{[local ~]} ssh koleinik@scc2.bu.edu -L 7777:localhost:5906  & Configure tunnel (must be executed in the local terminal window)    \\
+\verb! localhost:7777 ! & Connect with VNC client  \\
+\end{tabular}
+
+\vspace{15pt}
+
+
+
+
+
+\end{multicols*}
+\end{document}
