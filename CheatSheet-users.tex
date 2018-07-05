@@ -139,15 +139,17 @@
 \section{module (software environment)}
 \begin{tabular}{@{}ll@{}}
 \verb!module avail!   & List available packages \\
-\verb!module avail -t 2>\& 1 | less!   & Pipe module list to \textit{less} command\\
-\verb!moduleavail  | grep matlab!   & Fast search \\
-\verb!module load !\textit{matlab/2016a}    & Load module \textit{matlab} version 2016a \\
-\verb!module show !\textit{matlab/2016a}    & Show the content (env. variables) of module \textit{matlab/2016a} \\
-\verb!module unload !\textit{matlab/2016a}    & Unload the module\\ 
-\verb!module help !\textit{matlab/2016a}    & View information/help for specific module\\ 
+\verb!module avail python!   & List all available versions of python \\
+\verb!module load !\textit{matlab/2018a}    & Load module \textit{matlab} version 2016a \\
+\verb!module show !\textit{matlab/2018a}    & Show the content (env. variables) of module \textit{matlab/2016a} \\
+\verb!module unload !\textit{matlab/2018a}    & Unload the module\\ 
+\verb!module help !\textit{matlab/2018a}    & View information/help for specific module\\ 
 \verb!module list !    & List all loaded modules\\
 \verb!module purge !    & Unload all loaded modules\\
+\verb!module keyword statistics  !    & list all modules with specific keyword\\
 \verb!module help !    & List options for the module command\\
+\verb!module avail -t 2>\& 1 | less!   & Pipe module list to \textit{less} command\\
+\verb!moduleavail  | grep -i bowtie!   & Fast search \\
 \end{tabular}
 
 \vspace{15pt}
